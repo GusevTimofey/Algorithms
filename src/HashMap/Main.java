@@ -25,5 +25,10 @@ public class Main {
         System.out.println(hashMap.getLoadList());
         hashMap.removeAllElements();
         hashMap.printHashMap();
+
+        for (int i = 0; i < 10000; i++) {
+            hashMap.addElement(i,i+1);
+        }
+        hashMap.printHashMap();
     }
 }

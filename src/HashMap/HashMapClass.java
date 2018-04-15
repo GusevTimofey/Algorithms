@@ -1,14 +1,14 @@
 package HashMap;
 
-public class HashMapClass<E> {
+public class HashMapClass<K, V> {
 
-    public class Node<E> {
+    public class Node<K, V> {
         private Node next;
-        private E key;
+        private K key;
         private int hash;
-        private E value;
+        private V value;
 
-        Node(Node next, E key, int hash, E value) {
+        Node(Node next, K key, int hash, V value) {
             this.next = next;
             this.key = key;
             this.hash = hash;
@@ -23,11 +23,11 @@ public class HashMapClass<E> {
             this.next = next;
         }
 
-        public E getKey() {
+        public K getKey() {
             return key;
         }
 
-        public void setKey(E key) {
+        public void setKey(K key) {
             this.key = key;
         }
 
@@ -39,11 +39,11 @@ public class HashMapClass<E> {
             this.hash = hash;
         }
 
-        public E getValue() {
+        public V getValue() {
             return value;
         }
 
-        public void setValue(E value) {
+        public void setValue(V value) {
             this.value = value;
         }
     }
@@ -79,34 +79,33 @@ public class HashMapClass<E> {
         loadListNumber = getLoadListNumber();
     }
 
-    public E getValue(E key) {
-        E value = null;
-        E e = null;
+    public V getValue(K key) {
+        V e = null;
         if (key == null) {
             e = doSearchNullKey();
         } else {
-            int hash = doHash(key, value);
+            int hash = doHash(key);
             int index = searchPosition(hash, hashMap.length);
 
             if (hashMap[index] == null) {
                 System.out.println("no such element");
                 return null;
             }
-            Node<E> node = (Node<E>) hashMap[index];
+            Node<K, V> node = (Node<K, V>) hashMap[index];
             while (node.next != null) {
                 if (node.key == key)
                     e = node.value;
                 node = node.next;
             }
 
-            if(node.key == key)
+            if (node.key == key)
                 e = node.value;
         }
         return e;
     }
 
-    private E doSearchNullKey() {
-        Node<E> node = (Node<E>) hashMap[0];
+    private V doSearchNullKey() {
+        Node<K, V> node = (Node<K, V>) hashMap[0];
 
         if (hashMap[0] == null) {
             System.out.println("no such element");
@@ -123,16 +122,16 @@ public class HashMapClass<E> {
         return null;
     }
 
-    public void addElement(E key, E value) {
+    public void addElement(K key, V value) {
         if (key == null)
             putForNullKey(value);
         else {
-            int hash = doHash(key, value);
+            int hash = doHash(key);
             int index = searchPosition(hash, hashMap.length);
             if (hashMap[index] == null) {
                 addNode(hash, key, value, index);
             } else {
-                Node<E> otherNode = (Node<E>) hashMap[index];
+                Node<K, V> otherNode = (Node<K, V>) hashMap[index];
                 boolean isSet = false;
                 while (otherNode.next != null) {
                     if (otherNode.hash == hash && (otherNode.key == key || otherNode.key.equals(key))) {
@@ -151,14 +150,15 @@ public class HashMapClass<E> {
             }
         }
         size++;
+        hashMap = doResize(hashMap);
     }
 
-    private void putForNullKey(E value) {
+    private void putForNullKey(V value) {
         boolean isSet = false;
         if (hashMap[0] == null)
             hashMap[0] = new Node<>(null, null, 0, value);
         else {
-            Node<E> otherNode = (Node<E>) hashMap[0];
+            Node<K, V> otherNode = (Node<K, V>) hashMap[0];
 
             while (otherNode.next != null) {
                 if (otherNode.key == null) {
@@ -176,12 +176,12 @@ public class HashMapClass<E> {
         }
     }
 
-    private void addNode(int hash, E key, E value, int index) {
-        Node<E> e = (Node<E>) hashMap[index];
+    private void addNode(int hash, K key, V value, int index) {
+        Node<K, V> e = (Node<K, V>) hashMap[index];
         hashMap[index] = new Node<>(e, key, hash, value);
     }
 
-    private int doHash(E key, E value) {
+    private int doHash(K key) {
         int h = key.hashCode();
         h ^= (h >>> 20) ^ (h >>> 12);
         return h ^ (h >>> 7) ^ (h >>> 4);
@@ -192,28 +192,47 @@ public class HashMapClass<E> {
     }
 
     private Object[] doResize(Object[] hashMap) {
-        Object[] newHashMap = null;
+        Object[] newHashMap = hashMap;
         if (size >= threshold) {
-            newHashMap = new Object[hashMap.length * 2];
+            newHashMap = new Object[(hashMap.length * 2) + 1];
+            threshold = (int) (newHashMap.length * loadFactor);
 
             for (int i = 0; i < hashMap.length; i++) {
                 if (hashMap[i] == null)
                     continue;
-                Node<E> node = (Node<E>) hashMap[i];
+                Node<K, V> node = (Node<K, V>) hashMap[i];
                 while (node.next != null) {
+                    Node<K, V> tmpNode = node;
+                    int hash = tmpNode.hash;
+                    K key = tmpNode.key;
+                    V value = tmpNode.value;
 
+                    int index = searchPosition(hash, newHashMap.length);
+
+                    Node<K, V> tnpOther = (Node<K, V>) newHashMap[index];
+                    newHashMap[index] = new Node<>(tnpOther, key, hash, value);
+                    node = node.next;
                 }
+                Node<K, V> tmpNode = node;
+                int hash = tmpNode.hash;
+                K key = tmpNode.key;
+                V value = tmpNode.value;
+
+                int index = searchPosition(hash, newHashMap.length);
+
+                Node<K, V> tnpOther = (Node<K, V>) newHashMap[index];
+                newHashMap[index] = new Node<>(tnpOther, key, hash, value);
             }
 
         }
         return newHashMap;
     }
 
-    public void deleteElement(E key, E value) {
+    public void deleteElement(K key, V value) {
         if (key == null)
             removeNullKeyElement(key, value);
         else {
-            int hash = doHash(key, value);
+            int hash = doHash(key);
             int index = searchPosition(hash, hashMap.length);
 
             if (hashMap[index] == null) {
@@ -221,7 +240,7 @@ public class HashMapClass<E> {
                 return;
             }
             boolean isDel = false;
-            Node<E> node = (Node<E>) hashMap[index];
+            Node<K, V> node = (Node<K, V>) hashMap[index];
 
             if (node.next == null && (node.key == key && node.value == value)) {
                 hashMap[index] = null;
@@ -240,7 +259,7 @@ public class HashMapClass<E> {
                 node = node.next;
             }
             if (node.key == key && node.value == value) {
-                Node<E> otherNode = (Node<E>) hashMap[index];
+                Node<K, V> otherNode = (Node<K, V>) hashMap[index];
                 while (otherNode.next.next != null)
                     otherNode = otherNode.next;
                 otherNode.next = null;
@@ -252,12 +271,12 @@ public class HashMapClass<E> {
         size--;
     }
 
-    private void removeNullKeyElement(E key, E value) {
+    private void removeNullKeyElement(K key, V value) {
         if (hashMap[0] == null) {
             System.out.println("no such null element in HashMap");
             return;
         }
-        Node<E> node = (Node<E>) hashMap[0];
+        Node<K, V> node = (Node<K, V>) hashMap[0];
 
         if (node.next == null && (node.key == key && node.value == value)) {
             hashMap[0] = null;
@@ -275,7 +294,7 @@ public class HashMapClass<E> {
             node = node.next;
         }
         if (node.key == null) {
-            Node<E> otherNode = (Node<E>) hashMap[0];
+            Node<K, V> otherNode = (Node<K, V>) hashMap[0];
             while (otherNode.next.next != null)
                 otherNode = otherNode.next;
             otherNode.next = null;
@@ -299,7 +318,7 @@ public class HashMapClass<E> {
             int count = 0;
             if (hashMap[i] == null)
                 continue;
-            Node<E> node = (Node<E>) hashMap[i];
+            Node<K, V> node = (Node<K, V>) hashMap[i];
             while (node.next != null) {
                 count++;
                 System.out.println((i + 1) + " " + count + " - " + node.key + " " + node.value);
