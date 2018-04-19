@@ -170,10 +170,10 @@ public class HashMapClass<K, V> {
             removeNullKeyElement();
         else
             removeNoNullKeyElement(key);
-        size--;
     }
 
     private void removeNoNullKeyElement(K key) {
+        boolean isRemoved = false;
         int hash = doHash(key);
         int index = searchPosition(hash, hashMap.length);
         if (hashMap[index] == null) {
@@ -184,7 +184,8 @@ public class HashMapClass<K, V> {
         Node<K, V> node = (Node<K, V>) hashMap[index];
         Node<K, V> otherNode = node;
         for (; node != null; otherNode = node, node = node.next) {
-            if (key == node.key) {
+            if (key.equals(node.key)) {
+                isRemoved = true;
                 if (node == hashMap[index]) {
                     if (node.next == null)
                         hashMap[index] = null;
@@ -197,9 +198,12 @@ public class HashMapClass<K, V> {
                     otherNode.next = node.next;
             }
         }
+        if (isRemoved)
+            size--;
     }
 
     private void removeNullKeyElement() {
+        boolean isRemoved = false;
         if (hashMap[0] == null) {
             System.out.println("Элемент не найден, массив" +
                     "по найденному индексу изначально не содержит ни одного элемента");
@@ -213,6 +217,7 @@ public class HashMapClass<K, V> {
         }
         for (; node != null; otherNode = node, node = node.next) {
             if (node.key == null) {
+                isRemoved = true;
                 if (node == hashMap[0]) {
                     if (node.next == null)
                         hashMap[0] = null;
@@ -225,6 +230,8 @@ public class HashMapClass<K, V> {
                     otherNode.next = node.next;
             }
         }
+        if (isRemoved)
+            size--;
     }
 
     public int getNumberOfElements() {

@@ -30,11 +30,10 @@ public class Main {
             newHashMap.addElement(i, i + 1);
         System.out.println("Колличество элементов = " + newHashMap.getNumberOfElements());
         System.out.println("Текущий уровень загруженности = " + newHashMap.getCurrentThreshold());
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < 500; i++)
             newHashMap.removeElementByKey(i);
         System.out.println("Колличество элементов = " + newHashMap.getNumberOfElements());
         System.out.println("Текущий уровень загруженности = " + newHashMap.getCurrentThreshold());
         System.out.println("Текущее колличество цепочек в массиве = " + newHashMap.getNumOfListsInArray());
-
     }
 }
