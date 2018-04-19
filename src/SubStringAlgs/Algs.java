@@ -15,6 +15,14 @@ class Algs {
             this.text = text;
             this.pattern = pattern;
             System.out.println("Запуск алгоритма Бойера-Мура поиска подстроки!");
+            if (text.equals("")) {
+                System.out.println("You didn't enter the text!");
+                return;
+            }
+            if (pattern.equals("")) {
+                System.out.println("Nothing to search!");
+                return;
+            }
             fillMap();
         }
 
@@ -35,14 +43,22 @@ class Algs {
         }
 
         public List<Integer> searchSubstring() {
+            if (text.equals("")) {
+                return null;
+            }
+            if (pattern.equals("")) {
+                return null;
+            }
             List<Integer> list = new LinkedList<>();
             int i = 0;
             int j = pattern.length() - 1;
 
             while (i < text.length()) {
-                while (j > 0 && i < text.length() && text.charAt(i) == pattern.charAt(j)) {
-                    j--;
-                    i--;
+                while (j >= 0 && i < text.length() && text.charAt(i) == pattern.charAt(j)) {
+                    if (pattern.length() != 1) {
+                        i--;
+                        j--;
+                    }
                     if (j == 0) {
                         System.out.println("Подстрока найдена: начальная позиция " + i + " ,конечная позиция " + (i + pattern.length() - 1));
                         list.add(i);
@@ -70,7 +86,6 @@ class Algs {
             System.out.println();
             return list;
         }
-
     }
 
     static class RabinKurp {
@@ -84,7 +99,15 @@ class Algs {
         RabinKurp(String text, String patter) {
             this.text = text;
             this.pattern = patter;
-            hashArray = new int[text.length() - 4];
+            if (text.equals("")) {
+                System.out.println("You didn't enter the text!\n");
+                return;
+            }
+            if (pattern.equals("")) {
+                System.out.println("Nothing to search!\n");
+                return;
+            }
+            hashArray = new int[text.length()];
             System.out.println("Запуск алгоритма Рабина-Карпа поиска подстроки!");
             doHash();
         }
@@ -115,6 +138,12 @@ class Algs {
         }
 
         public List<Integer> searchSubstring() {
+            if (text.equals("")) {
+                return null;
+            }
+            if (pattern.equals("")) {
+                return null;
+            }
             List<Integer> list = new LinkedList<>();
 
             for (int i = 0; i < hashArray.length; i++) {
@@ -124,7 +153,6 @@ class Algs {
                     list.add(pattern.length() + i - 1);
                 }
             }
-
             for (Integer integer : list)
                 System.out.print(integer + " ");
             System.out.println();
@@ -170,6 +198,14 @@ class Algs {
         }
 
         public List<Integer> doSearchSubstring() {
+            if(text.equals("")){
+                System.out.println("no text");
+                return null;
+            }
+            if(pattern.equals("")){
+                System.out.println("no patter");
+                return null;
+            }
             int k = 0;
             for (int i = 0; i < text.length(); i++) {
                 while (k > 0 && pattern.charAt(k) != text.charAt(i))
