@@ -19,7 +19,7 @@ public class GraphAlgoritms {
         private int vertexNum;
         private boolean[] isVisited;
 
-        DFS(int[][] adjacencyMatrix) {
+        DFS(int[][] adjacencyMatrix) { //передаем матрицу смежности
             vertexNum = adjacencyMatrix[0].length;
             this.adjacencyMatrix = adjacencyMatrix;
         }
@@ -31,12 +31,12 @@ public class GraphAlgoritms {
             stack.push(0);
 
             while (!stack.empty()) {
-                int node = stack.pop();
+                int node = stack.pop();//пока стек не пустой ,мы кладем элемент(вершину графа)
                 if (isVisited[node])
                     continue;
                 isVisited[node] = true;
-                for (int i = vertexNum - 1; i >= 0; i--) {
-                    if (adjacencyMatrix[node][i] == 1 && !isVisited[i]) {
+                for (int i = vertexNum - 1; i >= 0; i--) { //обход всех вершин
+                    if (adjacencyMatrix[node][i] == 1 && !isVisited[i]) {//обход смежных вершин
                         stack.push(i);
                         isVisited[i] = false;
                     }
@@ -81,7 +81,7 @@ public class GraphAlgoritms {
     } //Breadth First Search
 
     public static class FloydWarshallAlg {
-
+        //обходит рекурсивно
         public void Run() {
             for (int k = 0; k < weightMatrix.length; k++) {
                 for (int i = 0; i < weightMatrix.length; i++) {

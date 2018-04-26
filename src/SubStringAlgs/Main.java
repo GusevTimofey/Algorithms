@@ -12,8 +12,8 @@ public class Main {
         String text2 = "qwerty1234";
         String pattern2 = "";
 
-        String text3 = "Hfjknefernge34th3l4dj53p4cmfjiwkfnxi4hthmn4ihit5hgoitcc45ithihtcoi54hti5";
-        String pattern3 = "c";
+        String text3 = "Hfjkne fernge34th3l4dj53p4cmfjiwkfn xi4hthmn4ihit5hgoitcc45ithihtcoi54hti5";
+        String pattern3 = " ";
 
         String text4 = "Hfjknefernge34th3l4djc1153p4cmfjiwkfnxi4hthmn4c11ihit5hgoitcc45ithihtcoi54hti5";
         String pattern4 = "c11";
