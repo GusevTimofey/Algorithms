@@ -64,6 +64,9 @@ public class Main {
         System.out.println(HeightTest(50_000));
         System.out.println(RBtree.getHight(treeMapClass1.root) + " <= " + 2 * (Math.log(50_001) / Math.log10(2)));
 
+        System.out.println(2 + " <= " + 1.45 * (Math.log10(2) / Math.log10(2)));
+
+
     }
 
     private static String HeightTest(int k) {

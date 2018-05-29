@@ -20,7 +20,7 @@ public class PriorityQueue<E extends Comparable<E>> {
             array = Arrays.copyOf(array, array.length * 2);
 
         int index = size;
-        array[index] = (E) new QueueObject<E>(priority, e);
+        array[index] = (E) new QueueObject<>(priority, e);
 
         while (hasParent(index) && parent(index).compareTo(array[index]) < 0) {
             E tmp = array[index];
@@ -38,16 +38,14 @@ public class PriorityQueue<E extends Comparable<E>> {
         int index = 0;
         while (hasLeftChild(index)) {
             int largestChild = leftIndex(index);
-            if (hasRightChild(index) && array[leftIndex(index)].compareTo(array[rightIndex(index)]) < 0) {
+            if (hasRightChild(index) && array[leftIndex(index)].compareTo(array[rightIndex(index)]) < 0)
                 largestChild = rightIndex(index);
-            }
             if (array[index].compareTo(array[largestChild]) < 0) {
                 E tmp = array[index];
                 array[index] = array[largestChild];
                 array[largestChild] = tmp;
-            } else {
+            } else
                 break;
-            }
             index = largestChild;
         }
     }

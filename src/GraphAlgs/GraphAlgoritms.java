@@ -81,7 +81,6 @@ public class GraphAlgoritms {
     } //Breadth First Search
 
     public static class FloydWarshallAlg {
-        //обходит рекурсивно
         public void Run() {
             for (int k = 0; k < weightMatrix.length; k++) {
                 for (int i = 0; i < weightMatrix.length; i++) {

@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
         String text = "kkkkkkkkk";
-        String pattern = "k";
+        String pattern = "kk";
 
         String text1 = "qwe1eqwe1eqwe1eqwe1e";
         String pattern1 = "qwe1e";
@@ -45,15 +45,15 @@ public class Main {
          */
 
         Algs.RabinKurp test3 = new Algs.RabinKurp(text, pattern);
-        test3.searchSubstring();
+        test3.matcher();
         Algs.RabinKurp test31 = new Algs.RabinKurp(text1, pattern1);
-        test31.searchSubstring();
+        test31.matcher();
         Algs.RabinKurp test32 = new Algs.RabinKurp(text2, pattern2);
-        test32.searchSubstring();
+        test32.matcher();
         Algs.RabinKurp test33 = new Algs.RabinKurp(text3, pattern3);
-        test33.searchSubstring();
+        test33.matcher();
         Algs.RabinKurp test34 = new Algs.RabinKurp(text4, pattern4);
-        test34.searchSubstring();
+        test34.matcher();
 
 
         /**

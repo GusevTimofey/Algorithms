@@ -1,9 +1,6 @@
 package SubStringAlgs;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 class Algs {
 
@@ -86,80 +83,45 @@ class Algs {
             System.out.println();
             return list;
         }
-    }
+    } //in best try 0(n/m), in the worst try 0(n*m)
 
     static class RabinKurp {
         private String text;
         private String pattern;
-        private int q = 13;
-        private int r = 2_000_003;
-        private int[] hashArray;
-        private int hashPattern;
+        private int r = 2_147_489;
+        private int d = 5;
 
-        RabinKurp(String text, String patter) {
+
+        RabinKurp(String text, String pattern) {
             this.text = text;
-            this.pattern = patter;
-            if (text.equals("")) {
-                System.out.println("You didn't enter the text!\n");
-                return;
-            }
-            if (pattern.equals("")) {
-                System.out.println("Nothing to search!\n");
-                return;
-            }
-            hashArray = new int[text.length()];
-            System.out.println("Запуск алгоритма Рабина-Карпа поиска подстроки!");
-            doHash();
+            this.pattern = pattern;
         }
 
-        private void doHash() {
-            int sumSymb = 0;
-            int sumSymbForText = 0;
+        public void matcher() {
+            long mathPow = (long) Math.pow(d, pattern.length() - 1);
+            long k = 0;
+            long s = 0;
 
-            for (int i = 0; i < pattern.length(); i++)
-                sumSymb += (pattern.charAt(i) * Math.pow(q, pattern.length() - i - 1));
-            hashPattern = sumSymb % r;
+            for (int i = 0; i < pattern.length(); i++) {
+                s = (d * s) + pattern.charAt(i) % r;
+                k = (d * k) + text.charAt(i) % r;
+            }
 
-            int k = 0;
-            String subStrText;
-            for (int i = 0; i < text.length(); i++) {
-                if (text.length() >= pattern.length() + i) {
-                    subStrText = text.substring(i, pattern.length() + i);
+            for (int i = 0; i < text.length() - pattern.length(); i++) {
+                String tmp = text.substring(i, i + pattern.length());
 
-                    for (int j = 0; j < subStrText.length(); j++)
-                        sumSymbForText += (subStrText.charAt(j) * Math.pow(q, subStrText.length() - j - 1));
+                if (k == s) {
+                    if (Objects.equals(tmp, pattern)) {
+                        System.out.println("Нашли! Начало подстроки: " + i + ". Конец подстроки: " + (i + pattern.length() - 1));
+                    }
 
-                    int hashText = sumSymbForText % r;
-                    hashArray[k] = hashText;
-                    k++;
-                    sumSymbForText = 0;
                 }
+                if (i < text.length() - pattern.length())
+                    k = d * (k - mathPow * (text.charAt(i) % r))
+                            + text.charAt(i + pattern.length()) % r;
             }
         }
-
-        public List<Integer> searchSubstring() {
-            if (text.equals("")) {
-                return null;
-            }
-            if (pattern.equals("")) {
-                return null;
-            }
-            List<Integer> list = new LinkedList<>();
-
-            for (int i = 0; i < hashArray.length; i++) {
-                if (hashArray[i] == hashPattern) {
-                    System.out.println("Подстрока найдена: начальная позиция " + i + " ,конечная позиция " + (pattern.length() + i - 1));
-                    list.add(i);
-                    list.add(pattern.length() + i - 1);
-                }
-            }
-            for (Integer integer : list)
-                System.out.print(integer + " ");
-            System.out.println();
-            System.out.println();
-            return list;
-        }
-    }
+    } //0(m+n), m - String's length, n = pattern's length
 
     static class KMP {
         private String text;
@@ -198,11 +160,11 @@ class Algs {
         }
 
         public List<Integer> doSearchSubstring() {
-            if(text.equals("")){
+            if (text.equals("")) {
                 System.out.println("no text");
                 return null;
             }
-            if(pattern.equals("")){
+            if (pattern.equals("")) {
                 System.out.println("no patter");
                 return null;
             }
@@ -231,5 +193,5 @@ class Algs {
 
             return listForPositions;
         }
-    }
+    } //0(m+n), m - String's length, n = pattern's length
 }
